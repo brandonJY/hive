@@ -31,11 +31,11 @@ import org.apache.hadoop.hive.common.type.TimestampTZ;
 import org.apache.hadoop.hive.ql.exec.UDF;
 import org.apache.hadoop.hive.serde2.io.TimestampLocalTZWritable;
 import org.apache.hadoop.hive.serde2.io.TimestampWritableV2;
-import java.time.Chronology;
+import java.time.chrono.Chronology;
 import java.time.ZoneId;
 import java.time.Period;
 import java.time.Duration;
-import java.time.chrono.ISOChronology;
+import java.time.chrono.IsoChronology;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -190,9 +190,9 @@ public abstract class UDFDateFloor extends UDF {
 
     private final boolean isCompound;
 
-    public PeriodGranularity(Period period, ZonedDateTime origin, DateTimeZone tz) {
+    public PeriodGranularity(Period period, ZonedDateTime origin, ZoneId tz) {
       this.period = period;
-      this.chronology = tz == null ? ISOChronology.getInstanceUTC() : ISOChronology.getInstance(tz);
+      this.chronology = tz == null ? IsoChronology.dateNow() : IsoChronology.dateNow(tz);
       if (origin == null) {
         // default to origin in given time zone when aligning multi-period granularities
         this.origin = new ZonedDateTime(0, ZoneOffset.UTC).withZoneRetainFields(chronology.getZone())
