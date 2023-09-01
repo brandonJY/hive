@@ -19,8 +19,8 @@
 package org.apache.hadoop.hive.druid.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.joda.time.Duration;
-import org.joda.time.Period;
+import java.time.Duration;
+import java.time.Period;
 
 /**
  * This class is copied from druid source code
