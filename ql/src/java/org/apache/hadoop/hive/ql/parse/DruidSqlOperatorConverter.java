@@ -48,7 +48,7 @@ import org.apache.hadoop.hive.ql.optimizer.calcite.reloperators.HiveFromUnixTime
 import org.apache.hadoop.hive.ql.optimizer.calcite.reloperators.HiveToDateSqlOperator;
 import org.apache.hadoop.hive.ql.optimizer.calcite.reloperators.HiveTruncSqlOperator;
 import org.apache.hadoop.hive.ql.optimizer.calcite.reloperators.HiveToUnixTimestampSqlOperator;
-import org.joda.time.Period;
+import java.time.Period;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
