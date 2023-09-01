@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Lists;
 import org.apache.druid.indexing.overlord.supervisor.SupervisorReport;
-import java.time.ZonedDateTime;
+import org.joda.time.DateTime;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -48,7 +48,7 @@ public class KafkaSupervisorReport extends SupervisorReport {
     private final Map<Integer, Long> latestOffsets;
     private final Map<Integer, Long> minimumLag;
     private final Long aggregateLag;
-    private final ZonedDateTime offsetsLastUpdated;
+    private final DateTime offsetsLastUpdated;
 
     @JsonCreator public KafkaSupervisorReportPayload(@JsonProperty("dataSource") String dataSource,
         @JsonProperty("topic") String topic,
@@ -58,7 +58,7 @@ public class KafkaSupervisorReport extends SupervisorReport {
         @Nullable @JsonProperty("latestOffsets") Map<Integer, Long> latestOffsets,
         @Nullable @JsonProperty("minimumLag") Map<Integer, Long> minimumLag,
         @Nullable @JsonProperty("aggregateLag") Long aggregateLag,
-        @Nullable @JsonProperty("offsetsLastUpdated") ZonedDateTime offsetsLastUpdated) {
+        @Nullable @JsonProperty("offsetsLastUpdated") DateTime offsetsLastUpdated) {
       this.dataSource = dataSource;
       this.topic = topic;
       this.partitions = partitions;
@@ -112,7 +112,7 @@ public class KafkaSupervisorReport extends SupervisorReport {
       return aggregateLag;
     }
 
-    @JsonProperty public ZonedDateTime getOffsetsLastUpdated() {
+    @JsonProperty public DateTime getOffsetsLastUpdated() {
       return offsetsLastUpdated;
     }
 
@@ -145,14 +145,14 @@ public class KafkaSupervisorReport extends SupervisorReport {
   private final KafkaSupervisorReportPayload payload;
 
   @JsonCreator public KafkaSupervisorReport(@JsonProperty("id") String id,
-      @JsonProperty("generationTime") ZonedDateTime generationTime,
+      @JsonProperty("generationTime") DateTime generationTime,
       @JsonProperty("payload") KafkaSupervisorReportPayload payload) {
     super(id, generationTime, payload);
     this.payload = payload;
   }
 
   public KafkaSupervisorReport(String dataSource,
-      ZonedDateTime generationTime,
+      DateTime generationTime,
       String topic,
       Integer partitions,
       Integer replicas,
@@ -160,7 +160,7 @@ public class KafkaSupervisorReport extends SupervisorReport {
       @Nullable Map<Integer, Long> latestOffsets,
       @Nullable Map<Integer, Long> minimumLag,
       @Nullable Long aggregateLag,
-      @Nullable ZonedDateTime offsetsLastUpdated) {
+      @Nullable DateTime offsetsLastUpdated) {
     this(dataSource,
         generationTime,
         new KafkaSupervisorReportPayload(dataSource,

@@ -19,8 +19,8 @@
 package org.apache.hadoop.hive.druid.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.time.Duration;
-import java.time.Period;
+import org.joda.time.Duration;
+import org.joda.time.Period;
 
 /**
  * This class is copied from druid source code
@@ -34,7 +34,7 @@ public interface SeekableStreamSupervisorTuningConfig {
   String DEFAULT_REPARTITION_TRANSITION_DURATION = "PT2M";
 
   static Duration defaultDuration(final Period period, final String theDefault) {
-    return (period == null ? new Period(theDefault) : period).toStandardDuration();
+    return (period == null ?  new Period(theDefault) : period).toStandardDuration();
   }
 
   @JsonProperty

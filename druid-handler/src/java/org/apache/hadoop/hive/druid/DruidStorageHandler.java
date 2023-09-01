@@ -108,7 +108,7 @@ import org.apache.hive.common.util.ShutdownHookManager;
 import org.jboss.netty.handler.codec.http.HttpMethod;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import java.time.ZonedDateTime;
-import java.time.Period;
+import org.joda.time.Period;
 import org.skife.jdbi.v2.exceptions.CallbackFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

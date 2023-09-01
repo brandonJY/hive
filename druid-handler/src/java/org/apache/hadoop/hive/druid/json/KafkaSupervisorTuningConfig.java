@@ -24,8 +24,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.apache.druid.segment.IndexSpec;
 import org.apache.druid.segment.indexing.TuningConfigs;
 import org.apache.druid.segment.writeout.SegmentWriteOutMediumFactory;
-import java.time.Duration;
-import java.time.Period;
+import org.joda.time.Duration;
+import org.joda.time.Period;
 
 import javax.annotation.Nullable;
 import java.io.File;

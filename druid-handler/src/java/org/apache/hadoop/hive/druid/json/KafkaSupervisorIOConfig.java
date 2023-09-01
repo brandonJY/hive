@@ -22,8 +22,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import org.apache.druid.java.util.common.StringUtils;
-import java.time.Duration;
-import java.time.Period;
+import org.joda.time.Duration;
+import org.joda.time.Period;
 
 import java.util.Map;
 
