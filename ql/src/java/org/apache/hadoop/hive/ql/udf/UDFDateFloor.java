@@ -21,6 +21,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -31,7 +32,6 @@ import org.apache.hadoop.hive.ql.exec.UDF;
 import org.apache.hadoop.hive.serde2.io.TimestampLocalTZWritable;
 import org.apache.hadoop.hive.serde2.io.TimestampWritableV2;
 import java.time.Chronology;
-import java.time.ZonedDateTime;
 import java.time.ZoneId;
 import java.time.Period;
 import java.time.Duration;
@@ -97,7 +97,7 @@ public abstract class UDFDateFloor extends UDF {
 
     public abstract long truncate(long offset);
 
-    public abstract DateTime toDateTime(long offset);
+    public abstract ZonedDateTime toDateTime(long offset);
 
     public abstract Iterable<Long> iterable(final long start, final long end);
 
@@ -137,8 +137,8 @@ public abstract class UDFDateFloor extends UDF {
 
     public abstract long truncate(long offset);
 
-    public DateTime toDateTime(long offset) {
-      return new DateTime(offset, DateTimeZone.UTC);
+    public ZonedDateTime toDateTime(long offset) {
+      return  ZonedDateTime.ofLocal(LocalDateTime.now(),offset, ZoneOffset.UTC);
     }
 
     public Iterable<Long> iterable(final long start, final long end) {
@@ -190,12 +190,12 @@ public abstract class UDFDateFloor extends UDF {
 
     private final boolean isCompound;
 
-    public PeriodGranularity(Period period, DateTime origin, DateTimeZone tz) {
+    public PeriodGranularity(Period period, ZonedDateTime origin, DateTimeZone tz) {
       this.period = period;
       this.chronology = tz == null ? ISOChronology.getInstanceUTC() : ISOChronology.getInstance(tz);
       if (origin == null) {
         // default to origin in given time zone when aligning multi-period granularities
-        this.origin = new DateTime(0, DateTimeZone.UTC).withZoneRetainFields(chronology.getZone())
+        this.origin = new ZonedDateTime(0, ZoneOffset.UTC).withZoneRetainFields(chronology.getZone())
                 .getMillis();
         this.hasOrigin = false;
       } else {
@@ -206,8 +206,8 @@ public abstract class UDFDateFloor extends UDF {
     }
 
     @Override
-    public DateTime toDateTime(long t) {
-      return new DateTime(t, chronology.getZone());
+    public ZonedDateTime toDateTime(long t) {
+      return new ZonedDateTime(t, chronology.getZone());
     }
 
     @Override
