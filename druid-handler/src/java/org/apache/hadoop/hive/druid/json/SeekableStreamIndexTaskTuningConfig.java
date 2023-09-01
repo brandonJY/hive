@@ -25,7 +25,7 @@ import org.apache.druid.segment.indexing.RealtimeTuningConfig;
 import org.apache.druid.segment.indexing.TuningConfig;
 import org.apache.druid.segment.realtime.appenderator.AppenderatorConfig;
 import org.apache.druid.segment.writeout.SegmentWriteOutMediumFactory;
-import org.joda.time.Period;
+import java.time.Period;
 
 import javax.annotation.Nullable;
 import java.io.File;
