@@ -21,7 +21,7 @@ package org.apache.hadoop.hive.druid.json;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import java.util.Map;
 
