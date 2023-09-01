@@ -414,7 +414,7 @@ abstract class HCatBaseStorer extends StoreFunc implements StoreMetadata {
         }
         return new HiveVarchar(varcharVal, vti.getLength());
       case TIMESTAMP:
-        DateTime dt = (DateTime)pigObj;
+        ZonedDateTime dt = (ZonedDateTime)pigObj;
         return Timestamp.ofEpochMilli(dt.getMillis());//toEpochMilli() returns UTC time regardless of TZ
       case DATE:
         /**
@@ -423,7 +423,7 @@ abstract class HCatBaseStorer extends StoreFunc implements StoreMetadata {
          * we assume it reasonably 'fits' into a Hive DATE.  If time part is not 0, it's considered
          * out of range for target type.
          */
-        DateTime dateTime = ((DateTime)pigObj);
+        ZonedDateTime dateTime = ((ZonedDateTime)pigObj);
         if(dateTime.getMillisOfDay() != 0) {
           handleOutOfRangeValue(pigObj, hcatFS, "Time component must be 0 (midnight) in local timezone; Local TZ val='" + pigObj + "'");
           return null;
