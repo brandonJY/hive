@@ -55,10 +55,9 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import org.joda.time.format.DateTimeParser;
-import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -217,11 +216,11 @@ import java.util.stream.Collectors;
         new DateTimeFormatterBuilder().append(null,
             new DateTimeParser[] {new DateTimeFormatterBuilder().appendLiteral('T').toParser(),
                 new DateTimeFormatterBuilder().appendLiteral(' ').toParser()})
-            .appendOptional(ISODateTimeFormat.timeElementParser().getParser())
+            .appendOptional(DateTimeFormatter.timeElementParser().getParser())
             .appendOptional(offsetElement.getParser())
             .toParser();
 
-    return new DateTimeFormatterBuilder().append(ISODateTimeFormat.dateElementParser())
+    return new DateTimeFormatterBuilder().append(DateTimeFormatter.dateElementParser())
         .appendOptional(timeOrOffset)
         .toFormatter();
   }
