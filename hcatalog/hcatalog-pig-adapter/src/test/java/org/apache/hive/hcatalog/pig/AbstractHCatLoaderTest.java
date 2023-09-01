@@ -60,7 +60,7 @@ import org.apache.pig.impl.logicalLayer.schema.Schema;
 import org.apache.pig.impl.logicalLayer.schema.Schema.FieldSchema;
 import org.apache.pig.tools.pigstats.OutputStats;
 import org.apache.pig.tools.pigstats.PigStats;
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -786,17 +786,17 @@ public abstract class AbstractHCatLoaderTest extends HCatBaseTest {
             // reading Hive from Pig by design.
             assertTrue("rowNum=" + numTuplesRead + " colNum=" + colPos
                     + " Reference data=" + ((Date)referenceData).toEpochMilli()
-                    + " actual=" + ((DateTime)t.get(colPos)).getMillis()
+                    + " actual=" + ((ZonedDateTime)t.get(colPos)).getMillis()
                     + "; types=(" + referenceData.getClass() + "," + t.get(colPos).getClass() + ")",
-                ((Date)referenceData).toEpochMilli() == ((DateTime)t.get(colPos)).getMillis());
+                ((Date)referenceData).toEpochMilli() == ((ZonedDateTime)t.get(colPos)).getMillis());
           } else if (referenceData instanceof Timestamp) {
             // Note that here we ignore nanos part of Hive Timestamp since nanos are dropped when
             // reading Hive from Pig by design.
             assertTrue("rowNum=" + numTuplesRead + " colNum=" + colPos
                 + " Reference data=" + ((Timestamp)referenceData).toEpochMilli()
-                + " actual=" + ((DateTime)t.get(colPos)).getMillis()
+                + " actual=" + ((ZonedDateTime)t.get(colPos)).getMillis()
                 + "; types=(" + referenceData.getClass() + "," + t.get(colPos).getClass() + ")",
-                ((Timestamp)referenceData).toEpochMilli()== ((DateTime)t.get(colPos)).getMillis());
+                ((Timestamp)referenceData).toEpochMilli()== ((ZonedDateTime)t.get(colPos)).getMillis());
           } else {
             // Doing String comps here as value objects in Hive in Pig are different so equals()
             // doesn't work.
