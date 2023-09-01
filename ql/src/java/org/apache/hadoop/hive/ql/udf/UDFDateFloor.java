@@ -21,7 +21,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -31,11 +30,12 @@ import org.apache.hadoop.hive.common.type.TimestampTZ;
 import org.apache.hadoop.hive.ql.exec.UDF;
 import org.apache.hadoop.hive.serde2.io.TimestampLocalTZWritable;
 import org.apache.hadoop.hive.serde2.io.TimestampWritableV2;
-import java.time.chrono.Chronology;
-import java.time.ZoneId;
-import java.time.Period;
-import java.time.Duration;
-import java.time.chrono.IsoChronology;
+import org.joda.time.Chronology;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.Period;
+import org.joda.time.ReadableDuration;
+import org.joda.time.chrono.ISOChronology;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -97,7 +97,7 @@ public abstract class UDFDateFloor extends UDF {
 
     public abstract long truncate(long offset);
 
-    public abstract ZonedDateTime toDateTime(long offset);
+    public abstract DateTime toDateTime(long offset);
 
     public abstract Iterable<Long> iterable(final long start, final long end);
 
@@ -137,8 +137,8 @@ public abstract class UDFDateFloor extends UDF {
 
     public abstract long truncate(long offset);
 
-    public ZonedDateTime toDateTime(long offset) {
-      return  ZonedDateTime.ofLocal(LocalDateTime.now(),offset, ZoneOffset.UTC);
+    public DateTime toDateTime(long offset) {
+      return new DateTime(offset, DateTimeZone.UTC);
     }
 
     public Iterable<Long> iterable(final long start, final long end) {
@@ -190,12 +190,12 @@ public abstract class UDFDateFloor extends UDF {
 
     private final boolean isCompound;
 
-    public PeriodGranularity(Period period, ZonedDateTime origin, ZoneId tz) {
+    public PeriodGranularity(Period period, DateTime origin, DateTimeZone tz) {
       this.period = period;
-      this.chronology = tz == null ? IsoChronology.dateNow() : IsoChronology.dateNow(tz);
+      this.chronology = tz == null ? ISOChronology.getInstanceUTC() : ISOChronology.getInstance(tz);
       if (origin == null) {
         // default to origin in given time zone when aligning multi-period granularities
-        this.origin = new ZonedDateTime(0, ZoneOffset.UTC).withZoneRetainFields(chronology.getZone())
+        this.origin = new DateTime(0, DateTimeZone.UTC).withZoneRetainFields(chronology.getZone())
                 .getMillis();
         this.hasOrigin = false;
       } else {
@@ -206,8 +206,8 @@ public abstract class UDFDateFloor extends UDF {
     }
 
     @Override
-    public ZonedDateTime toDateTime(long t) {
-      return new ZonedDateTime(t, chronology.getZone());
+    public DateTime toDateTime(long t) {
+      return new DateTime(t, chronology.getZone());
     }
 
     @Override
