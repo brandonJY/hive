@@ -415,7 +415,7 @@ abstract class HCatBaseStorer extends StoreFunc implements StoreMetadata {
         return new HiveVarchar(varcharVal, vti.getLength());
       case TIMESTAMP:
         ZonedDateTime dt = (ZonedDateTime)pigObj;
-        return Timestamp.ofEpochMilli(dt.getMillis());//toEpochMilli() returns UTC time regardless of TZ
+        return Timestamp.ofEpochMilli(dt.getNano()*1000000 );//toEpochMilli() returns UTC time regardless of TZ
       case DATE:
         /**
          * We ignore any TZ setting on Pig value since java.sql.Date doesn't have it (in any
@@ -424,7 +424,7 @@ abstract class HCatBaseStorer extends StoreFunc implements StoreMetadata {
          * out of range for target type.
          */
         ZonedDateTime dateTime = ((ZonedDateTime)pigObj);
-        if(dateTime.getMillisOfDay() != 0) {
+        if(dateTime.getNano() != 0) {
           handleOutOfRangeValue(pigObj, hcatFS, "Time component must be 0 (midnight) in local timezone; Local TZ val='" + pigObj + "'");
           return null;
         }
@@ -433,7 +433,7 @@ abstract class HCatBaseStorer extends StoreFunc implements StoreMetadata {
           for local timezone.  Date.valueOf() also uses local timezone (as does Date(int,int,int).
           Also see PigHCatUtil#extractPigObject() for corresponding read op.  This way a DATETIME from Pig,
           when stored into Hive and read back comes back with the same value.*/
-        return Date.of(dateTime.getYear(), dateTime.getMonthOfYear(), dateTime.getDayOfMonth());
+        return Date.of(dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth());
       default:
         throw new BackendException("Unexpected HCat type " + type + " for value " + pigObj
           + " of class " + pigObj.getClass().getName(), PigHCatUtil.PIG_EXCEPTION_CODE);

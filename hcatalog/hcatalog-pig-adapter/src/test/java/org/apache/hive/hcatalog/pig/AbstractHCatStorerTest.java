@@ -45,8 +45,8 @@ import org.apache.pig.data.DataByteArray;
 import org.apache.pig.data.Tuple;
 import org.apache.pig.impl.logicalLayer.FrontendException;
 import org.apache.pig.impl.util.LogUtils;
-import java.time.ZonedDateTime;
-import java.time.ZoneId;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -143,7 +143,7 @@ public abstract class AbstractHCatStorerTest extends HCatBaseTest {
 
   @Test
   public void testWriteDate() throws Exception {
-    ZonedDateTime d = new ZonedDateTime(1991, 10, 11, 0, 0);
+    DateTime d = new DateTime(1991, 10, 11, 0, 0);
     pigValueRangeTest("junitTypeTest1", "date", "datetime", null, d.toString(),
         d.toString(FORMAT_4_DATE), FORMAT_4_DATE);
     pigValueRangeTestOverflow("junitTypeTest2", "date", "datetime",
@@ -153,7 +153,7 @@ public abstract class AbstractHCatStorerTest extends HCatBaseTest {
         HCatBaseStorer.OOR_VALUE_OPT_VALUES.Throw, d.plusMinutes(1).toString(), FORMAT_4_DATE);// time
                                                                                                // !=
                                                                                                // 0
-    d = new ZonedDateTime(1991, 10, 11, 0, 0, ZoneOffset.ofHours(-11));
+    d = new DateTime(1991, 10, 11, 0, 0, DateTimeZone.forOffsetHours(-11));
     pigValueRangeTest("junitTypeTest4", "date", "datetime", null, d.toString(),
         d.toString(FORMAT_4_DATE), FORMAT_4_DATE);
     pigValueRangeTestOverflow("junitTypeTest5", "date", "datetime",
@@ -177,7 +177,7 @@ public abstract class AbstractHCatStorerTest extends HCatBaseTest {
 
   @Test
   public void testWriteDate3() throws Exception {
-    ZonedDateTime d = new ZonedDateTime(1991, 10, 11, 23, 10, ZoneOffset.ofHours(-11));
+    DateTime d = new DateTime(1991, 10, 11, 23, 10, DateTimeZone.forOffsetHours(-11));
     // expect to fail since the time component is not 0
     pigValueRangeTestOverflow("junitTypeTest4", "date", "datetime",
         HCatBaseStorer.OOR_VALUE_OPT_VALUES.Throw, d.toString(), FORMAT_4_DATE);
@@ -189,7 +189,7 @@ public abstract class AbstractHCatStorerTest extends HCatBaseTest {
 
   @Test
   public void testWriteDate2() throws Exception {
-    ZonedDateTime d =  ZonedDateTime.of(1991, 11, 12, 0, 0, 0,0,ZoneId.of("US/Eastern"));
+    DateTime d = new DateTime(1991, 11, 12, 0, 0, DateTimeZone.forID("US/Eastern"));
     pigValueRangeTest("junitTypeTest1", "date", "datetime", null, d.toString(),
         d.toString(FORMAT_4_DATE), FORMAT_4_DATE);
     pigValueRangeTestOverflow("junitTypeTest2", "date", "datetime",
@@ -212,18 +212,17 @@ public abstract class AbstractHCatStorerTest extends HCatBaseTest {
    */
   @Test
   public void testWriteTimestamp() throws Exception {
-  
-    ZonedDateTime d = ZonedDateTime.of(1991, 10, 11, 14, 23, 30, 10, ZoneId.of("UTC"));// uses default TZ
+    DateTime d = new DateTime(1991, 10, 11, 14, 23, 30, 10, DateTimeZone.UTC);// uses default TZ
     pigValueRangeTest("junitTypeTest1", "timestamp", "datetime", null, d.toString(),
-        d.toString());
+        d.toDateTime(DateTimeZone.UTC).toString());
     d = d.plusHours(2);
     pigValueRangeTest("junitTypeTest2", "timestamp", "datetime",
         HCatBaseStorer.OOR_VALUE_OPT_VALUES.Null, d.toString(),
-        d.toString());
+        d.toDateTime(DateTimeZone.UTC).toString());
 
-    d = ZonedDateTime.of(1991, 10, 11, 23, 24, 25, 26, ZoneId.of("UTC"));
+    d = new DateTime(1991, 10, 11, 23, 24, 25, 26, DateTimeZone.UTC);
     pigValueRangeTest("junitTypeTest1", "timestamp", "datetime", null, d.toString(),
-       d.toString());
+        d.toDateTime(DateTimeZone.UTC).toString());
   }
 
   // End: tests that check values from Pig that are out of range for target column
@@ -316,7 +315,7 @@ public abstract class AbstractHCatStorerTest extends HCatBaseTest {
     while (itr.hasNext()) {
       Tuple t = itr.next();
       if ("date".equals(hiveType)) {
-        ZonedDateTime dateTime = (ZonedDateTime) t.get(0);
+        DateTime dateTime = (DateTime) t.get(0);
         assertTrue(format != null);
         assertEquals("Comparing Pig to Raw data for table " + tblName, expectedValue,
             dateTime == null ? null : dateTime.toString(format));

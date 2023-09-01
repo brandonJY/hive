@@ -61,8 +61,8 @@ import org.apache.pig.data.TupleFactory;
 import org.apache.pig.impl.logicalLayer.schema.Schema;
 import org.apache.pig.impl.util.UDFContext;
 import org.apache.pig.impl.util.Utils;
-import java.time.ZonedDateTime;
-import java.time.ZoneId;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -430,7 +430,7 @@ class PigHCatUtil {
       * e.g. d = new java.sql.Date(System.currentMillis()).toString() so if you do this just after
       * midnight in Palo Alto, you'll get yesterday's date printed out.*/
       Date d = (Date)o;
-      result = new ZonedDateTime(d.getYear(), d.getMonth(), d.getDay(), 0, 0, ZoneId.UTC);
+      result = new DateTime(d.getYear(), d.getMonth(), d.getDay(), 0, 0, DateTimeZone.UTC);
       break;
     case TIMESTAMP:
       /*DATA TRUNCATION!!!
@@ -438,7 +438,7 @@ class PigHCatUtil {
        object in local TZ; This is arbitrary, since Hive value doesn't have any TZ notion, but
        we need to set something for TZ.
        Timestamp is consistently in GMT (unless you call toString() on it) so we use millis*/
-      result = new ZonedDateTime(((Timestamp)o).toEpochMilli(), ZoneId.UTC);
+      result = new DateTime(((Timestamp)o).toEpochMilli(), DateTimeZone.UTC);
       break;
     default:
       result = o;
