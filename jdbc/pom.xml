@@ -17,7 +17,7 @@
   <parent>
     <groupId>org.apache.hive</groupId>
     <artifactId>hive</artifactId>
-    <version>4.0.0-beta-2-SNAPSHOT</version>
+    <version>4.0.0-beta-1</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>hive-jdbc</artifactId>
@@ -26,6 +26,8 @@
   <properties>
     <hive.path.to.root>..</hive.path.to.root>
     <packaging.minimizeJar>false</packaging.minimizeJar>
+    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
   </properties>
   <dependencies>
     <!-- dependencies are always listed in sorted order by groupId, artifactId -->

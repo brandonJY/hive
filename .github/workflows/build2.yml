@@ -26,7 +26,7 @@ on:
   workflow_dispatch:
 jobs:
   macos-jdk8:
-    name: 'macOS (JDK 8)'
+    name: 'macOS (JDK 11)'
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -38,3 +38,5 @@ jobs:
         run: |
           cd jdbc
           mvn clean install 
+          cd ../jdbc-handler
+          mvn clean install
